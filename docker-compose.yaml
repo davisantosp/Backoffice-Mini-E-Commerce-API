@@ -1,0 +1,32 @@
+services:
+  backend:
+    container_name: backoffice-app
+    build: .
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    networks:
+      - "my_network"
+
+
+  db:
+    image: postgres:17-alpine
+    container_name: backoffice-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - "my_network"
+    volumes:
+      - backoffice-db:/var/lib/postgresql/data
+
+networks:
+  my_network:
+    driver: bridge
+
+volumes:
+  backoffice-db:
