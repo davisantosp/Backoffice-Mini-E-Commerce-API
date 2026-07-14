@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -29,7 +30,7 @@ public class Product {
 
     @NotNull
     @Column(nullable = false)
-    private Integer price;
+    private BigDecimal price;
 
     @NotNull
     @Column(nullable = false)
@@ -47,7 +48,7 @@ public class Product {
     @Column(nullable = false)
     private Instant updatedAt;
 
-    public Product(UUID id, String name, String description, Integer price, Integer quantityStored, Category category, Instant createdAt, Instant updatedAt) {
+    public Product(UUID id, String name, String description, BigDecimal price, Integer quantityStored, Category category, Instant createdAt, Instant updatedAt) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -58,7 +59,7 @@ public class Product {
         this.updatedAt = updatedAt;
     }
 
-    public Product(String name, String description, Integer price, Integer quantityStored, Category category) {
+    public Product(String name, String description, BigDecimal price, Integer quantityStored, Category category) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -81,7 +82,7 @@ public class Product {
         return description;
     }
 
-    public Integer getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
@@ -109,7 +110,7 @@ public class Product {
         this.description = description;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
