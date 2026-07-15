@@ -1,10 +1,11 @@
 package com.davisantosp.Backoffice_Mini_E_Commerce.services;
 
-import com.davisantosp.Backoffice_Mini_E_Commerce.domain.DTOs.CategoryResponseDTO;
 import com.davisantosp.Backoffice_Mini_E_Commerce.domain.DTOs.ProductCreateDTO;
 import com.davisantosp.Backoffice_Mini_E_Commerce.domain.DTOs.ProductResponseDTO;
+import com.davisantosp.Backoffice_Mini_E_Commerce.domain.entities.Category;
 import com.davisantosp.Backoffice_Mini_E_Commerce.domain.entities.Product;
 import com.davisantosp.Backoffice_Mini_E_Commerce.infra.exceptions.ResourceNotFoundException;
+import com.davisantosp.Backoffice_Mini_E_Commerce.repositories.CategoryRepository;
 import com.davisantosp.Backoffice_Mini_E_Commerce.repositories.ProductRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +16,11 @@ import java.util.UUID;
 public class ProductService {
 
     ProductRepository productRepository;
+    CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public List<ProductResponseDTO> findAll(){
@@ -28,12 +31,15 @@ public class ProductService {
     }
     public ProductResponseDTO findById(UUID id){
         Product product = productRepository.findById(id)
-                .orElseThrow(() ->  new ResourceNotFoundException("Category not found"));
+                .orElseThrow(() ->  new ResourceNotFoundException("Product not found"));
 
         return this.fromProduct(product);
     }
 
     public ProductResponseDTO create(ProductCreateDTO productCreateDTO){
+        if (!categoryRepository.existsById(productCreateDTO.getCategory_id()))
+            throw new ResourceNotFoundException("Category not found.");
+
         Product product = productRepository.save(
                 this.fromProductCreateDTO(productCreateDTO)
         );
@@ -43,11 +49,13 @@ public class ProductService {
 
     public ProductResponseDTO update(ProductCreateDTO updatedProductCreateDTO, UUID id){
         Product product = productRepository.findById(id)
-                .orElseThrow(() ->  new ResourceNotFoundException("Category not found"));
+                .orElseThrow(() ->  new ResourceNotFoundException("Product not found"));
+        Category category = categoryRepository.findById(updatedProductCreateDTO.getCategory_id())
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found."));
 
         product.setName(updatedProductCreateDTO.getName());
         product.setDescription(updatedProductCreateDTO.getDescription());
-        product.setCategory(updatedProductCreateDTO.getCategory());
+        product.setCategory(category);
         product.setPrice(updatedProductCreateDTO.getPrice());
         product.setQuantityStored(updatedProductCreateDTO.getQuantityStored());
 
@@ -57,7 +65,7 @@ public class ProductService {
 
     public void delete(UUID id){
         if(!productRepository.existsById(id))
-            throw new ResourceNotFoundException("Category not found");
+            throw new ResourceNotFoundException("Product not found");
         productRepository.deleteById(id);
     }
 
@@ -75,12 +83,15 @@ public class ProductService {
     }
 
     private Product fromProductCreateDTO(ProductCreateDTO productCreateDTO){
+        Category category = categoryRepository.findById(productCreateDTO.getCategory_id())
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found."));
+
         return new Product(
                 productCreateDTO.getName(),
                 productCreateDTO.getDescription(),
                 productCreateDTO.getPrice(),
                 productCreateDTO.getQuantityStored(),
-                productCreateDTO.getCategory()
+                category
         );
     }
 }

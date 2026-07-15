@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.validator.constraints.Length;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -24,7 +25,7 @@ public class Product {
     @Column(nullable = false)
     private String name;
 
-    @Max(1024)
+    @Length(max = 1024)
     @Column(nullable = false, length = 1024)
     private String description;
 

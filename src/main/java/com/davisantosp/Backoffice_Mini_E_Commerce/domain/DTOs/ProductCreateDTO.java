@@ -1,17 +1,17 @@
 package com.davisantosp.Backoffice_Mini_E_Commerce.domain.DTOs;
 
-import com.davisantosp.Backoffice_Mini_E_Commerce.domain.entities.Category;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 public class ProductCreateDTO {
     @NotBlank
     private String name;
 
-    @Max(1024)
+    @Length(max = 1024)
     @NotBlank
     private String description;
 
@@ -22,25 +22,25 @@ public class ProductCreateDTO {
     private Integer quantityStored;
 
     @NotNull
-    private Category category;
+    private UUID category_id;
 
-    public ProductCreateDTO(String name, String description, BigDecimal price, Integer quantityStored, Category category) {
+    public ProductCreateDTO(String name, String description, BigDecimal price, Integer quantityStored, UUID category_id) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.quantityStored = quantityStored;
-        this.category = category;
+        this.category_id = category_id;
     }
 
     public ProductCreateDTO() {
     }
 
-    public Category getCategory() {
-        return category;
+    public UUID getCategory_id() {
+        return category_id;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategory_id(UUID category_id) {
+        this.category_id = category_id;
     }
 
     public Integer getQuantityStored() {
