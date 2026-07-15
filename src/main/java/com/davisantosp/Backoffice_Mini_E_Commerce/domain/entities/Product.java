@@ -37,7 +37,7 @@ public class Product {
     private Integer quantityStored;
 
     @ManyToOne
-    @JoinColumn(name = "categories_id", nullable = false)
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     @CreationTimestamp
