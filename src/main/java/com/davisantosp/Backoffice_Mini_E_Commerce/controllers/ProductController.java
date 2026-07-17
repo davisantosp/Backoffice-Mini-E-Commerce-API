@@ -1,10 +1,7 @@
 package com.davisantosp.Backoffice_Mini_E_Commerce.controllers;
 
-import com.davisantosp.Backoffice_Mini_E_Commerce.domain.DTOs.CategoryCreateDTO;
-import com.davisantosp.Backoffice_Mini_E_Commerce.domain.DTOs.CategoryResponseDTO;
 import com.davisantosp.Backoffice_Mini_E_Commerce.domain.DTOs.ProductCreateDTO;
 import com.davisantosp.Backoffice_Mini_E_Commerce.domain.DTOs.ProductResponseDTO;
-import com.davisantosp.Backoffice_Mini_E_Commerce.services.CategoryService;
 import com.davisantosp.Backoffice_Mini_E_Commerce.services.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -26,31 +23,31 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity index(){
+    public ResponseEntity<List<ProductResponseDTO>> index(){
         List<ProductResponseDTO> responseDTOList = productService.findAll();
         return ResponseEntity.ok(responseDTOList);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity get(@PathVariable UUID id){
+    public ResponseEntity<ProductResponseDTO> get(@PathVariable UUID id){
         ProductResponseDTO responseDTO = productService.findById(id);
         return ResponseEntity.ok(responseDTO);
     }
 
     @PostMapping
-    public ResponseEntity post(@Valid @RequestBody ProductCreateDTO body){
+    public ResponseEntity<ProductResponseDTO> post(@Valid @RequestBody ProductCreateDTO body){
         ProductResponseDTO responseDTO = productService.create(body);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity post(@Valid @RequestBody ProductCreateDTO body, @PathVariable UUID id){
+    public ResponseEntity<ProductResponseDTO> update(@Valid @RequestBody ProductCreateDTO body, @PathVariable UUID id){
         ProductResponseDTO responseDTO = productService.update(body, id);
         return ResponseEntity.ok(responseDTO);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity post(@PathVariable UUID id){
+    public ResponseEntity<Void> delete(@PathVariable UUID id){
         productService.delete(id);
         return ResponseEntity.noContent().build();
     }
