@@ -37,9 +37,6 @@ public class ProductService {
     }
 
     public ProductResponseDTO create(ProductCreateDTO productCreateDTO){
-        if (!categoryRepository.existsById(productCreateDTO.getCategory_id()))
-            throw new ResourceNotFoundException("Category not found.");
-
         Product product = productRepository.save(
                 this.fromProductCreateDTO(productCreateDTO)
         );
