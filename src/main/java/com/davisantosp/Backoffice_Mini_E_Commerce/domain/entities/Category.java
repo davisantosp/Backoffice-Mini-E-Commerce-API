@@ -33,6 +33,13 @@ public class Category {
         this.name = name;
     }
 
+    public Category(UUID id, String name, Instant createdAt, Instant updatedAt) {
+        this.id = id;
+        this.name = name;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
     public Category() {
     }
 
